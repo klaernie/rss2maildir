@@ -741,8 +741,8 @@ def parse_and_deliver(maildir, url, statedir):
                 ]) + "@" + socket.gethostname() + ">"
         msg.add_header("Message-ID", messageid)
         msg.set_unixfrom("\"%s\" <rss2maildir@localhost>" %(url))
-        msg.add_header("From", "\"%s\" <rss2maildir@localhost>" %(author))
-        msg.add_header("To", "\"%s\" <rss2maildir@localhost>" %(url))
+        msg.add_header("From", "\"%s\" <rss2maildir@localhost>" %(author.encode("utf-8")))
+        msg.add_header("To", "\"%s\" <rss2maildir@localhost>" %(url.encode("utf-8")))
         if prevmessageid:
             msg.add_header("References", prevmessageid)
         createddate = datetime.datetime.now() \
