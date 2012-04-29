@@ -769,9 +769,12 @@ def parse_and_deliver(maildir, url, statedir):
             item["link"], \
             item["link"] )
         htmlpart = MIMEText(htmlcontent.encode("utf-8"), "html", "utf-8")
-        textparser = HTML2Text()
-        textparser.feed(content.encode("utf-8"))
-        textcontent = textparser.gettext()
+	try:
+		textparser = HTML2Text()
+		textparser.feed(content.encode("utf-8"))
+		textcontent = textparser.gettext()
+	except:
+		textcontent = "Content could not be decoded. Visit full URL."
         textcontent = "%s\n\nItem URL: %s" %( \
             textcontent, \
             item["link"] )
