@@ -307,9 +307,9 @@ class HTML2Text(HTMLParser):
         url = u''
         for attr in attrs:
             if attr[0] == 'alt':
-                alt = attr[1].decode('utf-8')
+                alt = attr[1]
             elif attr[0] == 'src':
-                url = attr[1].decode('utf-8')
+                url = attr[1]
         if url:
             if alt:
                 if self.images.has_key(alt):
