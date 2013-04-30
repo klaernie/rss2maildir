@@ -307,9 +307,15 @@ class HTML2Text(HTMLParser):
         url = u''
         for attr in attrs:
             if attr[0] == 'alt':
-                alt = attr[1]
+                if isinstance(attr[1], str):
+                    alt = u'%s' %(attr[1].decode("utf-8"))
+                else:
+                    alt = attr[1]
             elif attr[0] == 'src':
-                url = attr[1]
+                if isinstance(attr[1], str):
+                    url = u'%s' %(attr[1].decode("utf-8"))
+                else:
+                    url = attr[1]
         if url:
             if alt:
                 if self.images.has_key(alt):
