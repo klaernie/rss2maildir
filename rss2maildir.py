@@ -405,7 +405,8 @@ class HTML2Text(HTMLParser):
                 + u' ' * self.indentlevel \
                 + seperator.join( \
                     textwrap.wrap( \
-                        paragraph, self.textwidth - self.indentlevel))
+                        paragraph, self.textwidth - self.indentlevel)) \
+		+ u'\n'
         elif tag_thats_done == "pre":
             self.text = self.text + unicode( \
                 self.curdata.encode("utf-8"), "utf-8")
