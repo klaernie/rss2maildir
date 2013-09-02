@@ -774,13 +774,16 @@ def parse_and_deliver(maildir, url, statedir):
 		textparser = HTML2Text()
 		textparser.feed(content.encode("utf-8"))
 		textcontent = textparser.gettext()
+		text_fail = False
 	except:
 		textcontent = "Content could not be decoded. Visit full URL."
-        textcontent = "%s\n\nItem URL: %s" %( \
-            textcontent, \
-            item["link"] )
-        textpart = MIMEText(textcontent.encode("utf-8"), "plain", "utf-8")
-        msg.attach(textpart)
+		text_fail = True
+	if not text_fail:
+		textcontent = "%s\n\nItem URL: %s" %( \
+		    textcontent, \
+		    item["link"] )
+		textpart = MIMEText(textcontent.encode("utf-8"), "plain", "utf-8")
+		msg.attach(textpart)
         msg.attach(htmlpart)
 
         # start by working out the filename we should be writting to, we do
