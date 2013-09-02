@@ -315,26 +315,26 @@ class HTML2Text(HTMLParser):
                 if self.images.has_key(alt):
                     if self.images[alt]["url"] == url:
                         self.curdata = self.curdata \
-                            + u'|%s|' %(alt,)
+                            + u'%s\n' %(alt,)
                     else:
                         while self.images.has_key(alt):
                             alt = alt + "_"
                         self.images[alt] = {"url": url}
                         self.curdata = self.curdata \
-                            + u'|%s|' %(alt,)
+                            + u'%s\n' %(alt,)
                 else:
                     self.images[alt] = {"url": url}
                     self.curdata = self.curdata \
-                        + u'|%s|' %(alt,)
+                        + u'%s\n' %(alt,)
             else:
                 if self.images.has_key(url):
                     self.curdata = self.curdata \
-                        + u'|%s|' %(url,)
+                        + u'%s\n' %(url,)
                 else:
                     self.images[url] = {}
                     self.images[url]["url"] =url
                     self.curdata = self.curdata \
-                        + u'|%s|' %(url,)
+                        + u'%s\n' %(url,)
 
     def handle_curdata(self):
 
