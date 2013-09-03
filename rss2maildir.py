@@ -27,6 +27,7 @@ import feedparser
 
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
+from email.header import Header
 
 import datetime
 import random
@@ -756,12 +757,10 @@ def parse_and_deliver(maildir, url, statedir):
         msg.add_header("Date", createddate)
         msg.add_header("X-rss2maildir-rundate", datetime.datetime.now() \
             .strftime("%a, %e %b %Y %T -0000"))
-        subj_gen = HTML2Text()
         title = item["title"]
         title = re.sub(u'<', u'&lt;', title)
         title = re.sub(u'>', u'&gt;', title)
-        subj_gen.feed(title.encode("utf-8"))
-        msg.add_header("Subject", subj_gen.gettext())
+        msg.add_header("Subject", str(Header(title.encode("utf-8"),"utf-8")))
         msg.set_default_type("text/plain")
 
         htmlcontent = content.encode("utf-8")
