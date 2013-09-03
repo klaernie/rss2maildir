@@ -41,6 +41,8 @@ from ConfigParser import SafeConfigParser
 
 from base64 import b64encode
 
+import chardet
+
 if sys.version_info[0] == 2 and sys.version_info[1] >= 6:
     import hashlib as md5
 else:
@@ -276,7 +278,7 @@ class HTML2Text(HTMLParser):
             elif tag_name == u'a':
                 for attr in attrs:
                     if attr[0].lower() == u'href':
-                        self.urls.append(attr[1].decode('utf-8'))
+                        self.urls.append(attr[1])
                 self.curdata = self.curdata + u'`'
                 self.opentags.append(tag_name)
                 return
@@ -308,9 +310,15 @@ class HTML2Text(HTMLParser):
         url = u''
         for attr in attrs:
             if attr[0] == 'alt':
-                alt = attr[1].decode('utf-8')
+                if isinstance(attr[1], str):
+                    alt = u'%s' %(attr[1])
+                else:
+                    alt = attr[1]
             elif attr[0] == 'src':
-                url = attr[1].decode('utf-8')
+                if isinstance(attr[1], str):
+                    url = u'%s' %(attr[1])
+                else:
+                    url = attr[1]
         if url:
             if alt:
                 if self.images.has_key(alt):
@@ -562,7 +570,7 @@ class HTML2Text(HTMLParser):
     def handle_data(self, data):
         if len(self.opentags) == 0:
             self.opentags.append(u'p')
-        self.curdata = self.curdata + data.decode("utf-8")
+        self.curdata = "%s%s" %(self.curdata, data)
 
     def handle_charref(self, name):
         try:
@@ -702,6 +710,13 @@ def parse_and_deliver(maildir, url, statedir):
                 content = u''
 
         md5sum = md5.md5(content.encode("utf-8")).hexdigest()
+
+        # make sure content is unicode encoded
+        if not isinstance(content, unicode):
+            cd_res = chardet.detect(content)
+            chrset = cd_res['encoding']
+            print "detected charset %s for item %s" %(chrset, item["link"])
+            content = content.decode(chrset)
 
         prevmessageid = None
 
