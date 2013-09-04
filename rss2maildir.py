@@ -24,6 +24,7 @@ import httplib
 import urllib
 
 import feedparser
+from lxml import html
 
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
@@ -209,7 +210,7 @@ def parse_and_deliver(maildir, url, statedir):
         msg.add_header("Date", createddate)
         msg.add_header("X-rss2maildir-rundate", datetime.datetime.now() \
             .strftime("%a, %e %b %Y %T -0000"))
-        title = item["title"]
+        title = html.fromstring(item["title"]).text
         title = re.sub(u'<', u'&lt;', title)
         title = re.sub(u'>', u'&gt;', title)
         msg.add_header("Subject", str(Header(title.encode("utf-8"),"utf-8")))
